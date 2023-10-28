@@ -61,21 +61,8 @@ window.onload = async () => {
     shapes.push(shapeFactory.createCube());
     shapes[3].translate([1., 0, 0]);
 
-    /* --------- Attach event listener for keyboard events to the window --------- */
-    window.addEventListener("keydown", (event) => {
-        /* ----- this event contains all the information you will need to process user interaction ---- */
-        console.log(event)
-
-        let velocity = 0.01;
-
-        const callback = {
-            "ArrowLeft"  : () => mat4.translate(viewMatrix, viewMatrix, [-velocity, 0, 0]),
-            "ArrowRight"  : () => mat4.translate(viewMatrix, viewMatrix, [velocity, 0, 0]),
-            "ArrowUp"  : () => mat4.translate(viewMatrix, viewMatrix, [0, velocity, 0]),
-            "ArrowDown"  : () => mat4.translate(viewMatrix, viewMatrix, [0, -velocity, 0]),
-        }[event.key]
-        callback?.()
-    })
+    let cameraMovementHandler = new CameraMovementHandler(mat4);
+    cameraMovementHandler.registerInputListeners();
 
     /* --------- Load some data from external files - only works with an http server --------- */
     //  await loadSomething();
