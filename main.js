@@ -48,16 +48,33 @@ window.onload = async () => {
     mat4.translate(viewMatrix, viewMatrix, [-0.5, 0, 0])
 
     /* --------- create 2 cubes and translate them away from each other --------- */
-    shapes.push(createShape());
-    shapes[0].translate([0.5, 0, 0]);
+    let shapeFactory = new ShapeFactory();
+    shapes.push(shapeFactory.createCube());
+    shapes[0].translate([0.2, 0, 0]);
 
-    shapes.push(createShape());
-    shapes[1].translate([-0.5, 0, 0]);
+    shapes.push(shapeFactory.createCube());
+    shapes[1].translate([-0.2, 0, 0]);
+
+    shapes.push(shapeFactory.createCube());
+    shapes[2].translate([0.6, 0, 0]);
+
+    shapes.push(shapeFactory.createCube());
+    shapes[3].translate([1., 0, 0]);
 
     /* --------- Attach event listener for keyboard events to the window --------- */
     window.addEventListener("keydown", (event) => {
         /* ----- this event contains all the information you will need to process user interaction ---- */
         console.log(event)
+
+        let velocity = 0.01;
+
+        const callback = {
+            "ArrowLeft"  : () => mat4.translate(viewMatrix, viewMatrix, [-velocity, 0, 0]),
+            "ArrowRight"  : () => mat4.translate(viewMatrix, viewMatrix, [velocity, 0, 0]),
+            "ArrowUp"  : () => mat4.translate(viewMatrix, viewMatrix, [0, velocity, 0]),
+            "ArrowDown"  : () => mat4.translate(viewMatrix, viewMatrix, [0, -velocity, 0]),
+        }[event.key]
+        callback?.()
     })
 
     /* --------- Load some data from external files - only works with an http server --------- */
@@ -90,85 +107,5 @@ function render(now) {
     });
 
     requestAnimationFrame(render)
-}
-
-
-function createShape() {
-    /* --------- define vertex positions & colors --------- */
-    /* -------------- 3 vertices per triangle ------------- */
-    const vertices = [
-        // X, Y, Z, W
-        0.2, 0.2, 0.2, 1,
-        -0.2, 0.2, 0.2, 1,
-        0.2, -0.2, 0.2, 1,
-
-        -0.2, 0.2, 0.2, 1,
-        -0.2, -0.2, 0.2, 1,
-        0.2, -0.2, 0.2, 1, // front face end
-
-        -0.2, -0.2, -0.2, 1,
-        -0.2, -0.2, 0.2, 1,
-        -0.2, 0.2, 0.2, 1,
-
-        -0.2, -0.2, -0.2, 1,
-        -0.2, 0.2, 0.2, 1,
-        -0.2, 0.2, -0.2, 1, // left face end
-
-        0.2, 0.2, -0.2, 1,
-        -0.2, -0.2, -0.2, 1,
-        -0.2, 0.2, -0.2, 1,
-
-        0.2, 0.2, -0.2, 1,
-        0.2, -0.2, -0.2, 1,
-        -0.2, -0.2, -0.2, 1, // back face end
-
-        0.2, -0.2, 0.2, 1,
-        -0.2, -0.2, -0.2, 1,
-        0.2, -0.2, -0.2, 1,
-
-        0.2, -0.2, 0.2, 1,
-        -0.2, -0.2, 0.2, 1,
-        -0.2, -0.2, -0.2, 1, // bottom face end
-
-        0.2, 0.2, 0.2, 1,
-        0.2, -0.2, -0.2, 1,
-        0.2, 0.2, -0.2, 1,
-
-        0.2, -0.2, -0.2, 1,
-        0.2, 0.2, 0.2, 1,
-        0.2, -0.2, 0.2, 1, // right face end
-
-        0.2, 0.2, 0.2, 1,
-        0.2, 0.2, -0.2, 1,
-        -0.2, 0.2, -0.2, 1,
-
-        0.2, 0.2, 0.2, 1,
-        -0.2, 0.2, -0.2, 1,
-        -0.2, 0.2, 0.2, 1, // Top face end
-    ];
-
-    const colorData = [
-        [0.0, 0.0, 0.0, 1.0],    // Front face: black
-        [1.0, 0.0, 0.0, 1.0],    // left face: red
-        [0.0, 1.0, 0.0, 1.0],    // back face: green
-        [0.0, 0.0, 1.0, 1.0],    // Bottom face: blue
-        [1.0, 1.0, 0.0, 1.0],    // Right face: yellow
-        [1.0, 0.0, 1.0, 1.0],    // top face: purple
-    ];
-
-    const colors = [];
-
-    /* --------- add one color per face, so 6 times for each color --------- */
-    colorData.forEach(color => {
-        for (let i = 0; i < 6; ++i) {
-            colors.push(color);
-        }
-    });
-
-    /* --------- create shape object and initialize data --------- */
-    const cube = new Shape();
-    cube.initData(vertices, colors)
-
-    return cube;
 }
 
