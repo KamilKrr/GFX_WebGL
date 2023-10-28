@@ -14,7 +14,7 @@ const locations = {
     }
 }
 
-const viewMatrix = mat4.create();
+let camera = null;
 
 window.onload = async () => {
 
@@ -36,32 +36,23 @@ window.onload = async () => {
     locations.uniforms.modelViewMatrix = gl.getUniformLocation(program, "modelViewMatrix");
     locations.uniforms.projectionMatrix = gl.getUniformLocation(program, "projectionMatrix");
 
-    /* --------- create & send projection matrix --------- */
-    const projectionMatrix = mat4.create();
-    mat4.perspective(projectionMatrix, toRad(45), canvas.clientWidth / canvas.clientHeight, 0.1, 100);
-    gl.uniformMatrix4fv(locations.uniforms.projectionMatrix, gl.FALSE, projectionMatrix);
+    camera = new Camera(canvas);
 
-    /* --------- create view matrix --------- */
-    mat4.lookAt(viewMatrix, [0, 0, 2], [0, 0, 0], [0, 1, 0]);
-
-    /* --------- translate view matrix --------- */
-    mat4.translate(viewMatrix, viewMatrix, [-0.5, 0, 0])
-
-    /* --------- create 2 cubes and translate them away from each other --------- */
-    let shapeFactory = new ShapeFactory();
-    shapes.push(shapeFactory.createCube());
+    gl.uniformMatrix4fv(locations.uniforms.projectionMatrix, gl.FALSE, camera.projectionMatrix);
+    
+    shapes.push(new Cube());
     shapes[0].translate([0.2, 0, 0]);
 
-    shapes.push(shapeFactory.createCube());
+    shapes.push(new Cube());
     shapes[1].translate([-0.2, 0, 0]);
 
-    shapes.push(shapeFactory.createCube());
+    shapes.push(new Cube());
     shapes[2].translate([0.6, 0, 0]);
 
-    shapes.push(shapeFactory.createCube());
+    shapes.push(new Cube());
     shapes[3].translate([1., 0, 0]);
 
-    let cameraMovementHandler = new CameraMovementHandler(mat4);
+    let cameraMovementHandler = new CameraInteractionHandler(camera);
     cameraMovementHandler.registerInputListeners();
 
     /* --------- Load some data from external files - only works with an http server --------- */
@@ -90,7 +81,7 @@ function render(now) {
     shapes.forEach(shape => {
         /* --------- scale rotation amount by time difference --------- */
         shape.rotate(1 * delta, [0, 1, 1]);
-        shape.draw();
+        shape.draw(camera);
     });
 
     requestAnimationFrame(render)

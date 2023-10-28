@@ -1,7 +1,7 @@
-class CameraMovementHandler {
+class CameraInteractionHandler {
   
-  constructor(projectionMatrix) {
-    this.projectionMatrix = projectionMatrix;
+  constructor(camera) {
+    this.camera = camera;
     this.isMouseDown = false;
     this.dragStartPosition = {x: 0, y: 0};
   }
@@ -13,10 +13,10 @@ class CameraMovementHandler {
       let velocity = 0.05;
 
       const callback = {
-        "ArrowLeft"  : () => this.#translateProjectionsMatrix([-velocity, 0, 0]),
-        "ArrowRight"  : () => this.#translateProjectionsMatrix([velocity, 0, 0]),
-        "ArrowUp"  : () => this.#translateProjectionsMatrix([0, velocity, 0]),
-        "ArrowDown"  : () => this.#translateProjectionsMatrix([0, -velocity, 0]),
+        "ArrowLeft"  : () => this.#translateCamera([-velocity, 0, 0]),
+        "ArrowRight"  : () => this.#translateCamera([velocity, 0, 0]),
+        "ArrowUp"  : () => this.#translateCamera([0, velocity, 0]),
+        "ArrowDown"  : () => this.#translateCamera([0, -velocity, 0]),
       }[event.key]
       callback?.()
     })
@@ -42,11 +42,11 @@ class CameraMovementHandler {
       
       this.dragStartPosition = currentPosition;
       
-      this.#translateProjectionsMatrix([deltaX, deltaY, 0]);
+      this.#translateCamera([deltaX, deltaY, 0]);
     });
   }
   
-  #translateProjectionsMatrix(vector) {
-    this.projectionMatrix.translate(viewMatrix, viewMatrix, vector)
+  #translateCamera(vector) {
+    this.camera.translate(vector);
   }
 }
