@@ -20,6 +20,8 @@ class ShapeInteractionHandler {
         this.activeShapes = [this.shapes[event.key - 1]];
 
         this.coordinateSystem.modelMatrix = this.shapes[event.key - 1].modelMatrix;
+        this.coordinateSystem.scaleMatrixGlobal = this.shapes[event.key - 1].scaleMatrixGlobal;
+
         this.coordinateSystem.show();
       }
 
