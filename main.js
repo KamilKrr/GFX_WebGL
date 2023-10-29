@@ -1,8 +1,6 @@
 const { mat4 } = glMatrix;
 const toRad = glMatrix.glMatrix.toRadian;
 
-const shapes = [];
-
 const locations = {
     attributes: {
         vertexLocation: null,
@@ -51,7 +49,7 @@ window.onload = async () => {
     }
 
     let cameraMovementHandler = new CameraInteractionHandler(scene);
-    cameraMovementHandler.registerInputListeners();
+    //cameraMovementHandler.registerInputListeners();
 
     let shapeInteractionHandler = new ShapeInteractionHandler(scene);
     shapeInteractionHandler.registerInputListeners();

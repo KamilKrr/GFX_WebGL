@@ -29,7 +29,7 @@ class Scene {
 
     this.shapes.forEach(shape => {
       /* --------- scale rotation amount by time difference --------- */
-      shape.rotate(1 * delta, [0, 1, 1]);
+      //shape.rotate(1 * delta, [0, 1, 1]);
       shape.draw(this.camera);
     });
   }
