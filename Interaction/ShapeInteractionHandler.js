@@ -3,18 +3,23 @@ class ShapeInteractionHandler {
     this.shapes = scene.shapes;
     this.activeShapes = [];
     this.useGlobalOrigin = false;
+    this.coordinateSystem =  new CoordinateSystem(scene.gl);
+    this.coordinateSystem.hide();
+    scene.addSupportShape(this.coordinateSystem);
   }
   
   registerInputListeners() {
     window.addEventListener("keydown", (event) => {
-      console.log(event);
-
       if(event.key == 0){
         this.useGlobalOrigin = true;
         this.activeShapes = this.shapes;
+        this.coordinateSystem.hide();
       }else if(event.key >= 1 && event.key <= this.shapes.length) {
         this.useGlobalOrigin = false;
         this.activeShapes = [this.shapes[event.key - 1]];
+
+        this.coordinateSystem.modelMatrix = this.shapes[event.key - 1].modelMatrix;
+        this.coordinateSystem.show();
       }
 
       const callback = {

@@ -42,9 +42,9 @@ window.onload = async () => {
     gl.uniformMatrix4fv(locations.uniforms.projectionMatrix, gl.FALSE, camera.projectionMatrix);
     
 
-    for(let i = 0; i < 4; i++) {
+    for(let i = 0; i < 5; i++) {
         let cube = new Cube(gl);
-        cube.translate([0.4 * i, -0.3, 0]);
+        cube.translate([-0.8 + 0.4 * i, -0.4, 0]);
         scene.addShape(cube);
     }
 
@@ -65,13 +65,13 @@ async function loadObjFiles() {
     const bunnyFile = await fetch('3D Objects/bunny.obj').then(result => result.text());
     let bunny = WavefrontObjImporter.importShape(bunnyFile, [0.15, 0.2, 0.5], scene.gl);
     bunny.scale([3, 3, 3]);
-    bunny.translate([0, .1, 0]);
+    bunny.translate([-0.5, 0.15, 0]);
     scene.addShape(bunny);
 
     const teapotFile = await fetch('3D Objects/teapot.obj').then(result => result.text());
-    let teapot = WavefrontObjImporter.importShape(teapotFile, [0.1, 0.1, .1], scene.gl);
+    let teapot = WavefrontObjImporter.importShape(teapotFile, [0.1, 0.1, 0.1], scene.gl);
     teapot.scale([.2, .2, .2]);
-    teapot.translate([2, .2, 0]);
+    teapot.translate([0.5, 0, 0]);
     scene.addShape(teapot);
 }
 

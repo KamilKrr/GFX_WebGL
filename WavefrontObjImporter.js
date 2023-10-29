@@ -11,8 +11,6 @@ class WavefrontObjImporter {
       colors.push([r + color[0], r + color[1], r + color[2], 1.0]);
     });
     
-    console.log(colors);
-    
     let shape = new Shape(gl);
     shape.initData(vertices, colors);
     return shape;

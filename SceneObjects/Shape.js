@@ -11,6 +11,8 @@ class Shape extends SceneObject {
             vertexBuffer: this.gl.createBuffer(),
             colorBuffer: this.gl.createBuffer(),
         }
+
+        this.isHidden = false;
     }
 
     initData(vertices, colors) {
@@ -27,6 +29,7 @@ class Shape extends SceneObject {
     }
 
     draw(camera) {
+        if(this.isHidden) return;
         /* --------- set up attribute arrays --------- */
         Shape.setupAttribute(this.gl, this.buffers.vertexBuffer, locations.attributes.vertexLocation);
         Shape.setupAttribute(this.gl, this.buffers.colorBuffer, locations.attributes.colorLocation);
@@ -34,12 +37,21 @@ class Shape extends SceneObject {
         /* --------- combine view and model matrix into modelView matrix --------- */
         const modelViewMatrix = mat4.create();
         mat4.mul(modelViewMatrix, camera.modelMatrix, this.modelMatrix);
+        mat4.mul(modelViewMatrix, modelViewMatrix, this.scaleMatrix);
 
         /* --------- send modelView matrix to GPU --------- */
         this.gl.uniformMatrix4fv(locations.uniforms.modelViewMatrix, this.gl.FALSE, modelViewMatrix);
 
         /* --------- draw the shape --------- */
         this.gl.drawArrays(this.gl.TRIANGLES, 0, this.vertices.length / 4);
+    }
+
+    hide() {
+        this.isHidden = true;
+    }
+
+    show() {
+        this.isHidden = false;
     }
 
     static setupAttribute(gl, buffer, location) {

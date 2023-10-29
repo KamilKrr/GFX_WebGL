@@ -2,6 +2,7 @@ class Scene {
   constructor() {
     this.camera = null;
     this.shapes = [];
+    this.supportShapes = []; // Shapes used for visual support, cannot be selected
     this.then = 0;
     this.gl = null;
   }
@@ -17,7 +18,10 @@ class Scene {
   addShape(shape) {
     this.shapes.push(shape);
   }
-  
+
+  addSupportShape(shape) {
+    this.supportShapes.push(shape);
+  }
   
   render(now) {
     /* --------- calculate time per frame in seconds --------- */
@@ -28,8 +32,10 @@ class Scene {
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
     this.shapes.forEach(shape => {
-      /* --------- scale rotation amount by time difference --------- */
-      //shape.rotate(1 * delta, [0, 1, 1]);
+      shape.draw(this.camera);
+    });
+
+    this.supportShapes.forEach(shape => {
       shape.draw(this.camera);
     });
   }
