@@ -2,7 +2,6 @@ const { mat4 } = glMatrix;
 const toRad = glMatrix.glMatrix.toRadian;
 
 const shapes = [];
-let gl = null;
 
 const locations = {
     attributes: {
@@ -15,19 +14,20 @@ const locations = {
 }
 
 let camera = null;
+let scene = null;
 
 window.onload = async () => {
 
     /* --------- basic setup --------- */
     let canvas = document.getElementById("canvas");
-    gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+    let gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
 
     gl.enable(gl.DEPTH_TEST);
     webglUtils.resizeCanvasToDisplaySize(gl.canvas);
     gl.viewport(0, 0, canvas.clientWidth, canvas.clientHeight);
     gl.clearColor(0.729, 0.764, 0.674, 1);
 
-    const program = createShaderProgram("v-shader", "f-shader");
+    const program = createShaderProgram(gl, "v-shader", "f-shader");
     gl.useProgram(program);
 
     /* --------- save attribute & uniform locations --------- */
@@ -37,23 +37,24 @@ window.onload = async () => {
     locations.uniforms.projectionMatrix = gl.getUniformLocation(program, "projectionMatrix");
 
     camera = new Camera(canvas);
+    scene = new Scene();
+    scene.setCamera(camera);
+    scene.setGlContext(gl);
 
     gl.uniformMatrix4fv(locations.uniforms.projectionMatrix, gl.FALSE, camera.projectionMatrix);
     
-    shapes.push(new Cube());
-    shapes[0].translate([0.2, 0, 0]);
 
-    shapes.push(new Cube());
-    shapes[1].translate([-0.2, 0, 0]);
+    for(let i = 0; i < 4; i++) {
+        let cube = new Cube(gl);
+        cube.translate([0.4 * i, 0, 0]);
+        scene.addShape(cube);
+    }
 
-    shapes.push(new Cube());
-    shapes[2].translate([0.6, 0, 0]);
-
-    shapes.push(new Cube());
-    shapes[3].translate([1., 0, 0]);
-
-    let cameraMovementHandler = new CameraInteractionHandler(camera);
+    let cameraMovementHandler = new CameraInteractionHandler(scene);
     cameraMovementHandler.registerInputListeners();
+
+    let shapeInteractionHandler = new ShapeInteractionHandler(scene);
+    shapeInteractionHandler.registerInputListeners();
 
     /* --------- Load some data from external files - only works with an http server --------- */
     //  await loadSomething();
@@ -68,22 +69,9 @@ async function loadSomething() {
     console.log(data);
 }
 
-let then = 0;
 
 function render(now) {
-    /* --------- calculate time per frame in seconds --------- */
-    let delta = now - then;
-    delta *= 0.001;
-    then = now;
-
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-    shapes.forEach(shape => {
-        /* --------- scale rotation amount by time difference --------- */
-        shape.rotate(1 * delta, [0, 1, 1]);
-        shape.draw(camera);
-    });
-
+    scene.render(now);
     requestAnimationFrame(render)
 }
 

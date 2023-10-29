@@ -59,8 +59,8 @@ const colorData = [
 ];
 
 class Cube extends Shape {
-  constructor() {
-    super();
+  constructor(gl) {
+    super(gl);
     
     const colors = [];
 

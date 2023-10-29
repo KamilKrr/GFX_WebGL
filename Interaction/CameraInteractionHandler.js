@@ -1,7 +1,7 @@
 class CameraInteractionHandler {
   
-  constructor(camera) {
-    this.camera = camera;
+  constructor(scene) {
+    this.camera = scene.camera;
     this.isMouseDown = false;
     this.dragStartPosition = {x: 0, y: 0};
   }

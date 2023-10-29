@@ -1,5 +1,5 @@
 
-function loadShader(shaderId, shaderType) {
+function loadShader(gl, shaderId, shaderType) {
     const shader = gl.createShader(shaderType);
 
     gl.shaderSource(shader, document.getElementById(shaderId).text);
@@ -14,9 +14,9 @@ function loadShader(shaderId, shaderType) {
     return shader;
 }
 
-function createShaderProgram(vShaderId, fShaderId) {
-    const vShader = loadShader(vShaderId, gl.VERTEX_SHADER);
-    const fShader = loadShader(fShaderId, gl.FRAGMENT_SHADER);
+function createShaderProgram(gl, vShaderId, fShaderId) {
+    const vShader = loadShader(gl, vShaderId, gl.VERTEX_SHADER);
+    const fShader = loadShader(gl, fShaderId, gl.FRAGMENT_SHADER);
 
     const program = gl.createProgram();
 

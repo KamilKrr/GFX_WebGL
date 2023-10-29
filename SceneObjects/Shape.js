@@ -1,14 +1,15 @@
 class Shape extends SceneObject {
-    constructor() {
+    constructor(gl) {
         super();
         
+        this.gl = gl;
         this.vertices = [];
         this.colors = [];
 
         this.buffers = {
             /* --------- initialize buffers --------- */
-            vertexBuffer: gl.createBuffer(),
-            colorBuffer: gl.createBuffer(),
+            vertexBuffer: this.gl.createBuffer(),
+            colorBuffer: this.gl.createBuffer(),
         }
     }
 
@@ -18,30 +19,30 @@ class Shape extends SceneObject {
         this.colors = new Float32Array(colors.flat());
 
         /* --------- send data to buffers --------- */
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers.vertexBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, this.vertices, gl.STATIC_DRAW);
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.buffers.vertexBuffer);
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, this.vertices, this.gl.STATIC_DRAW);
 
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers.colorBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, this.colors, gl.STATIC_DRAW);
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.buffers.colorBuffer);
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, this.colors, this.gl.STATIC_DRAW);
     }
 
     draw(camera) {
         /* --------- set up attribute arrays --------- */
-        Shape.setupAttribute(this.buffers.vertexBuffer, locations.attributes.vertexLocation);
-        Shape.setupAttribute(this.buffers.colorBuffer, locations.attributes.colorLocation);
+        Shape.setupAttribute(this.gl, this.buffers.vertexBuffer, locations.attributes.vertexLocation);
+        Shape.setupAttribute(this.gl, this.buffers.colorBuffer, locations.attributes.colorLocation);
 
         /* --------- combine view and model matrix into modelView matrix --------- */
         const modelViewMatrix = mat4.create();
         mat4.mul(modelViewMatrix, camera.modelMatrix, this.modelMatrix);
 
         /* --------- send modelView matrix to GPU --------- */
-        gl.uniformMatrix4fv(locations.uniforms.modelViewMatrix, gl.FALSE, modelViewMatrix);
+        this.gl.uniformMatrix4fv(locations.uniforms.modelViewMatrix, this.gl.FALSE, modelViewMatrix);
 
         /* --------- draw the shape --------- */
-        gl.drawArrays(gl.TRIANGLES, 0, this.vertices.length / 4);
+        this.gl.drawArrays(this.gl.TRIANGLES, 0, this.vertices.length / 4);
     }
 
-    static setupAttribute(buffer, location) {
+    static setupAttribute(gl, buffer, location) {
         gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
 
         gl.vertexAttribPointer(
