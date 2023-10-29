@@ -48,6 +48,11 @@ window.onload = async () => {
         scene.addShape(cube);
     }
 
+    let pyramid = new Pyramid(gl);
+    pyramid.rotate(toRad(90), [1, 0, 0]);
+    pyramid.rotate(toRad(45), [0, 1, 0]);
+    scene.addShape(pyramid);
+
     let cameraInteractionHandler = new CameraInteractionHandler(scene);
     cameraInteractionHandler.registerInputListeners();
 
