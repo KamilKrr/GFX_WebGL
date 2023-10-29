@@ -84,10 +84,16 @@ async function loadObjFiles() {
     scene.addShape(bunny);
 
     const teapotFile = await fetch('3D Objects/teapot.obj').then(result => result.text());
-    let teapot = WavefrontObjImporter.importShape(teapotFile, [0.1, 0.1, 0.1], scene.gl);
+    let teapot = WavefrontObjImporter.importShape(teapotFile, [0.65, 0.1, 0.2], scene.gl);
     teapot.scale([.3, .3, .3]);
     teapot.translate([0.5, 0, 0]);
     scene.addShape(teapot);
+
+    const textFile = await fetch('3D Objects/text.obj').then(result => result.text());
+    let text = WavefrontObjImporter.importShape(textFile, [0.1, 0.1, 0.1], scene.gl);
+    text.translate([0, .6, 0]);
+    text.scale([.3, .3, .3]);
+    scene.addShape(text);
 }
 
 
