@@ -54,15 +54,13 @@ window.onload = async () => {
     let shapeInteractionHandler = new ShapeInteractionHandler(scene);
     shapeInteractionHandler.registerInputListeners();
 
-    let useArrowKeysToggle = true;
-    
     window.addEventListener("keydown", (event) => {
         if(event.key == ' '){
-            useArrowKeysToggle = !useArrowKeysToggle;
-            cameraInteractionHandler.canUseArrowKeys = useArrowKeysToggle;
-            shapeInteractionHandler.canUseArrowKeys = !useArrowKeysToggle;
-
-            console.log(cameraInteractionHandler.canUseArrowKeys);
+            cameraInteractionHandler.canUseArrowKeys = true;
+            shapeInteractionHandler.canUseArrowKeys = false;
+        } else if(event.key >= 1 && event.key <= 9) {
+            cameraInteractionHandler.canUseArrowKeys = false;
+            shapeInteractionHandler.canUseArrowKeys = true;
         }
     });
 

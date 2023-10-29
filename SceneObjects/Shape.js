@@ -36,8 +36,9 @@ class Shape extends SceneObject {
 
         /* --------- combine view and model matrix into modelView matrix --------- */
         const modelViewMatrix = mat4.create();
-        mat4.mul(modelViewMatrix, camera.modelMatrix, this.modelMatrix);
-        mat4.mul(modelViewMatrix, modelViewMatrix, this.scaleMatrix);
+        mat4.mul(modelViewMatrix, this.modelMatrix, this.scaleMatrixLocal);
+        mat4.mul(modelViewMatrix, this.scaleMatrixGlobal, modelViewMatrix);
+        mat4.mul(modelViewMatrix, camera.modelMatrix, modelViewMatrix);
 
         /* --------- send modelView matrix to GPU --------- */
         this.gl.uniformMatrix4fv(locations.uniforms.modelViewMatrix, this.gl.FALSE, modelViewMatrix);

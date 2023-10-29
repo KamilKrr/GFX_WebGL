@@ -2,7 +2,8 @@ class SceneObject {
   constructor() {
     /* --------- initialize model matrix --------- */
     this.modelMatrix = mat4.create();
-    this.scaleMatrix = mat4.create();
+    this.scaleMatrixGlobal = mat4.create();
+    this.scaleMatrixLocal = mat4.create();
   }
 
   rotate(angle, axis, global = false) {
@@ -17,11 +18,14 @@ class SceneObject {
 
   scale(vector, global = false) {
     if (!global) {
-      mat4.scale(this.scaleMatrix, this.scaleMatrix, vector);
+      mat4.scale(this.scaleMatrixLocal, this.scaleMatrixLocal, vector);
     } else {
-      const scaleMatrix = mat4.create();
-      mat4.scale(scaleMatrix, scaleMatrix, vector);
-      mat4.mul(this.scaleMatrix, scaleMatrix, this.scaleMatrix);
+      mat4.scale(this.scaleMatrixGlobal, this.scaleMatrixGlobal, vector);
+      /*
+      const scaleMatrixHelper = mat4.create();
+      mat4.scale(scaleMatrixHelper, scaleMatrixHelper, vector);
+      mat4.mul(this.scaleMatrix, scaleMatrixHelper, this.scaleMatrix);
+      */
     }
   }
 
