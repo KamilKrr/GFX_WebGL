@@ -44,7 +44,7 @@ window.onload = async () => {
 
     for(let i = 0; i < 4; i++) {
         let cube = new Cube(gl);
-        cube.translate([0.4 * i, 0, 0]);
+        cube.translate([0.4 * i, -0.3, 0]);
         scene.addShape(cube);
     }
 
@@ -55,16 +55,24 @@ window.onload = async () => {
     shapeInteractionHandler.registerInputListeners();
 
     /* --------- Load some data from external files - only works with an http server --------- */
-    //  await loadSomething();
+    await loadObjFiles();
 
     /* --------- start render loop --------- */
     requestAnimationFrame(render);
 }
 
-/* --------- simple example of loading external files --------- */
-async function loadSomething() {
-    const data = await fetch('helpers.js').then(result => result.text());
-    console.log(data);
+async function loadObjFiles() {
+    const bunnyFile = await fetch('3D Objects/bunny.obj').then(result => result.text());
+    let bunny = WavefrontObjImporter.importShape(bunnyFile, [0.15, 0.2, 0.5], scene.gl);
+    bunny.scale([3, 3, 3]);
+    bunny.translate([0, .1, 0]);
+    scene.addShape(bunny);
+
+    const teapotFile = await fetch('3D Objects/teapot.obj').then(result => result.text());
+    let teapot = WavefrontObjImporter.importShape(teapotFile, [0.1, 0.1, .1], scene.gl);
+    teapot.scale([.2, .2, .2]);
+    teapot.translate([2, .2, 0]);
+    scene.addShape(teapot);
 }
 
 
