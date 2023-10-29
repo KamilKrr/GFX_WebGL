@@ -25,8 +25,13 @@ class SceneObject {
     }
   }
 
-  translate(vector) {
-    mat4.translate(this.modelMatrix, this.modelMatrix, vector);
+  translate(vector, global = false) {
+    if (!global) {
+      mat4.translate(this.modelMatrix, this.modelMatrix, vector);
+    } else {
+      const transformMatrix = mat4.create();
+      mat4.translate(transformMatrix, transformMatrix, vector);
+      mat4.mul(this.modelMatrix, transformMatrix, this.modelMatrix);
+    }
   }
-  
 }

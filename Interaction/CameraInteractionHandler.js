@@ -4,6 +4,7 @@ class CameraInteractionHandler {
     this.camera = scene.camera;
     this.isMouseDown = false;
     this.dragStartPosition = {x: 0, y: 0};
+    this.canUseArrowKeys = true;
   }
   
   registerInputListeners() {
@@ -13,10 +14,10 @@ class CameraInteractionHandler {
       let velocity = 0.05;
 
       const callback = {
-        "ArrowLeft"  : () => this.#translateCamera([-velocity, 0, 0]),
-        "ArrowRight"  : () => this.#translateCamera([velocity, 0, 0]),
-        "ArrowUp"  : () => this.#translateCamera([0, velocity, 0]),
-        "ArrowDown"  : () => this.#translateCamera([0, -velocity, 0]),
+        "ArrowLeft"  : () => this.canUseArrowKeys && this.#translateCamera([-velocity, 0, 0]),
+        "ArrowRight"  : () => this.canUseArrowKeys && this.#translateCamera([velocity, 0, 0]),
+        "ArrowUp"  : () => this.canUseArrowKeys && this.#translateCamera([0, velocity, 0]),
+        "ArrowDown"  : () => this.canUseArrowKeys && this.#translateCamera([0, -velocity, 0]),
       }[event.key]
       callback?.()
     })
@@ -47,6 +48,6 @@ class CameraInteractionHandler {
   }
   
   #translateCamera(vector) {
-    this.camera.translate(vector);
+      this.camera.translate(vector);
   }
 }

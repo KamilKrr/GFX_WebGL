@@ -5,12 +5,13 @@ class ShapeInteractionHandler {
     this.useGlobalOrigin = false;
     this.coordinateSystem =  new CoordinateSystem(scene.gl);
     this.coordinateSystem.hide();
+    this.canUseArrowKeys = false;
     scene.addSupportShape(this.coordinateSystem);
   }
   
   registerInputListeners() {
     window.addEventListener("keydown", (event) => {
-      if(event.key == 0){
+      if(event.code === 'Digit0'){
         this.useGlobalOrigin = true;
         this.activeShapes = this.shapes;
         this.coordinateSystem.hide();
@@ -40,10 +41,10 @@ class ShapeInteractionHandler {
         "j"  : () => this.#rotate(5, [0, 0, 1]),
 
         //Translation
-        "ArrowLeft"  : () => this.#translate([-0.05, 0, 0]),
-        "ArrowRight"  : () => this.#translate([0.05, 0, 0]),
-        "ArrowUp"  : () => this.#translate([0, 0.05, 0]),
-        "ArrowDown"  : () => this.#translate([0, -0.05, 0]),
+        "ArrowLeft"  : () => this.canUseArrowKeys && this.#translate([-0.05, 0, 0]),
+        "ArrowRight"  : () => this.canUseArrowKeys && this.#translate([0.05, 0, 0]),
+        "ArrowUp"  : () => this.canUseArrowKeys && this.#translate([0, 0.05, 0]),
+        "ArrowDown"  : () => this.canUseArrowKeys && this.#translate([0, -0.05, 0]),
         ","  : () => this.#translate([0, 0, 0.05]),
         "."  : () => this.#translate([0, 0, -0.05]),
       }[event.key]
@@ -65,7 +66,7 @@ class ShapeInteractionHandler {
 
   #translate(vector) {
     this.activeShapes.forEach(shape => {
-      shape.translate(vector);
+      shape.translate(vector, this.useGlobalOrigin);
     })
   }
 }

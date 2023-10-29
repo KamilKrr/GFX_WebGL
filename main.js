@@ -48,11 +48,23 @@ window.onload = async () => {
         scene.addShape(cube);
     }
 
-    let cameraMovementHandler = new CameraInteractionHandler(scene);
-    cameraMovementHandler.registerInputListeners();
+    let cameraInteractionHandler = new CameraInteractionHandler(scene);
+    cameraInteractionHandler.registerInputListeners();
 
     let shapeInteractionHandler = new ShapeInteractionHandler(scene);
     shapeInteractionHandler.registerInputListeners();
+
+    let useArrowKeysToggle = true;
+    
+    window.addEventListener("keydown", (event) => {
+        if(event.key == ' '){
+            useArrowKeysToggle = !useArrowKeysToggle;
+            cameraInteractionHandler.canUseArrowKeys = useArrowKeysToggle;
+            shapeInteractionHandler.canUseArrowKeys = !useArrowKeysToggle;
+
+            console.log(cameraInteractionHandler.canUseArrowKeys);
+        }
+    });
 
     /* --------- Load some data from external files - only works with an http server --------- */
     await loadObjFiles();
@@ -70,7 +82,7 @@ async function loadObjFiles() {
 
     const teapotFile = await fetch('3D Objects/teapot.obj').then(result => result.text());
     let teapot = WavefrontObjImporter.importShape(teapotFile, [0.1, 0.1, 0.1], scene.gl);
-    teapot.scale([.2, .2, .2]);
+    teapot.scale([.3, .3, .3]);
     teapot.translate([0.5, 0, 0]);
     scene.addShape(teapot);
 }
