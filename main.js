@@ -49,7 +49,7 @@ window.onload = async () => {
     }
 
     let cameraMovementHandler = new CameraInteractionHandler(scene);
-    //cameraMovementHandler.registerInputListeners();
+    cameraMovementHandler.registerInputListeners();
 
     let shapeInteractionHandler = new ShapeInteractionHandler(scene);
     shapeInteractionHandler.registerInputListeners();
