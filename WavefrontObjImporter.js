@@ -1,15 +1,21 @@
 class WavefrontObjImporter {
   static importShape(file, color, gl) {
     let parsed = this.#parseFile(file);
-    let vertices = this.#expand(parsed.vertices, parsed.faceVertices);
-    let normals = this.#expand(parsed.normals, parsed.faceNormals);
+    let computed = this.#computeVertices(parsed);
+    let vertices = computed.vertices;
+    let normals = computed.normals;
     let colors = [];
 
     let r = 0.0;
+    /*
     vertices.forEach(() => {
       r += 0.00002;
       r %= 1.0;
       colors.push([r + color[0], r + color[1], r + color[2], 1.0]);
+    });
+    */
+    vertices.forEach(() => {
+      colors.push([color[0], color[1], color[2], 1.0]);
     });
     
     let shape = new Shape(gl);
@@ -18,18 +24,54 @@ class WavefrontObjImporter {
     return shape;
   }
 
-  static #expand(items, catalogue) {
-    let expanded = [];
+  static #computeVertices(parsedData) {
+    console.log(parsedData);
 
-    catalogue.forEach(page => {
-      page.forEach(index => {
-        expanded.push(items[index - 1]);
-      })
-    });
+    let vertices = [];
+    let normals = [];
 
-    return expanded;
+    parsedData.faces.forEach(face => {
+      for(let i = 0; i < 3; i++) {
+        let vertexIndex = face.vertices[i];
+        let normalIndex = face.normals[i];
+
+
+        vertices.push(parsedData.vertices[vertexIndex - 1]);
+
+        //calculate normal
+        //search neighboring faces and average their normals
+        let neighboringNormals = [];
+        parsedData.faces.forEach(_face => {
+          if(_face.vertices.includes(vertexIndex)){
+            let _normalIndex = _face.normals[0];
+            neighboringNormals.push(parsedData.normals[_normalIndex - 1]);
+          }
+        });
+
+        let sumNormals = [0, 0, 0];
+        neighboringNormals.forEach(normal => {
+          sumNormals[0] += normal[0];
+          sumNormals[1] += normal[1];
+          sumNormals[2] += normal[2];
+        });
+
+        let length = Math.sqrt(sumNormals[0] * sumNormals[0] + sumNormals[1] * sumNormals[1] + sumNormals[2] * sumNormals[2]);
+        sumNormals[0] = sumNormals[0] / length;
+        sumNormals[1] = sumNormals[1] / length;
+        sumNormals[2] = sumNormals[2] / length;
+
+        normals.push(sumNormals);
+        //normals.push(parsedData.normals[normalIndex - 1]);
+      }
+    })
+
+
+    return {
+      vertices: vertices,
+      normals: normals
+    }
   }
-  
+
   static #parseFile(file) {
     let lines = file.split('\n');
     
@@ -39,6 +81,8 @@ class WavefrontObjImporter {
     let faceVertices = [];
     let faceNormals = [];
     
+    let faces = [];
+
     lines.forEach(line => {
       let tokens = line.split(' ');
       
@@ -50,8 +94,11 @@ class WavefrontObjImporter {
           normals.push([parseFloat(tokens[1]), parseFloat(tokens[2]), parseFloat(tokens[3])]);
           break;
         case 'f': // Face
-          faceVertices.push([this.#parseIndex(tokens[1], 0), this.#parseIndex(tokens[2], 0), this.#parseIndex(tokens[3], 0)]);
-          faceNormals.push([this.#parseIndex(tokens[1], 1), this.#parseIndex(tokens[2], 1), this.#parseIndex(tokens[3], 1)]);
+          faces.push(
+            {
+              vertices: [this.#parseIndex(tokens[1], 0), this.#parseIndex(tokens[2], 0), this.#parseIndex(tokens[3], 0)],
+              normals: [this.#parseIndex(tokens[1], 1), this.#parseIndex(tokens[2], 1), this.#parseIndex(tokens[3], 1)]
+            });
           break;
       }
     });
@@ -59,8 +106,7 @@ class WavefrontObjImporter {
     return {
       vertices: vertices,
       normals: normals,
-      faceVertices: faceVertices,
-      faceNormals: faceNormals,
+      faces: faces,
     }
   }
 

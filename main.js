@@ -49,11 +49,12 @@ window.onload = async () => {
     shaderPrograms.withLightProgram = new ShaderProgram(gl, shaders.withLight, shaders.fragment, shaderInfo, camera);
     shaderPrograms.withLightProgram.enable();
 
+    /*
     for(let i = 0; i < 5; i++) {
         let cube = new Cube(gl);
         cube.translate([-0.8 + 0.4 * i, -0.4, 0]);
         scene.addShape(cube);
-    }
+    }*/
 
     /*
     let pyramid = new Pyramid(gl);
@@ -88,16 +89,24 @@ window.onload = async () => {
 
 async function loadObjFiles() {
     const bunnyFile = await fetch('3D Objects/bunny.obj').then(result => result.text());
-    let bunny = WavefrontObjImporter.importShape(bunnyFile, [0.15, 0.2, 0.5], scene.gl);
-    bunny.scale([3, 3, 3]);
-    bunny.translate([-0.5, 0.15, 0]);
+    let bunny = WavefrontObjImporter.importShape(bunnyFile, [0.9, 0.7, 0.5], scene.gl);
+    bunny.scale([4, 4, 4]);
+    bunny.translate([-0.4, 0, 0]);
     scene.addShape(bunny);
+
 
     const teapotFile = await fetch('3D Objects/teapot.obj').then(result => result.text());
     let teapot = WavefrontObjImporter.importShape(teapotFile, [0.65, 0.1, 0.2], scene.gl);
-    teapot.scale([.3, .3, .3]);
-    teapot.translate([0.5, 0, 0]);
+    teapot.scale([.5, .5, .5]);
+    teapot.translate([0.4, -0.2, 0]);
     scene.addShape(teapot);
+
+    /*
+    const sphereFile = await fetch('3D Objects/sphere.obj').then(result => result.text());
+    let sphere = WavefrontObjImporter.importShape(sphereFile, [0.8, 0, 0], scene.gl);
+    sphere.scale([.1, .1, .1]);
+    sphere.translate([0, 0, 0]);
+    scene.addShape(sphere);
 
     /*
     const textFile = await fetch('3D Objects/text.obj').then(result => result.text());
