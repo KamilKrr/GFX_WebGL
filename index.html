@@ -26,16 +26,28 @@
         precision mediump float;
 
         attribute vec4 vertexPosition; 
-        attribute vec4 vertexColor;    
+        attribute vec4 vertexColor;
+        attribute vec3 vertexNormal;
 
         uniform mat4 modelViewMatrix;
         uniform mat4 projectionMatrix;
+        uniform mat3 normalMatrix;
+
+        uniform vec4 lightViewPosition;
 
         varying vec4 fragmentColor;    
 
         void main() {
-            gl_Position = projectionMatrix * modelViewMatrix * vertexPosition; 
-            fragmentColor = vertexColor; 
+            vec4 vertexViewPosition = modelViewMatrix * vertexPosition;
+            vec3 lightVector = normalize(lightViewPosition.xyz - vertexViewPosition.xyz);
+            vec3 normal = normalize(normalMatrix * vertexNormal);
+
+            float lightIntensity = max(0.0, dot(lightVector, normal));
+
+
+            gl_Position = projectionMatrix * vertexViewPosition;
+            fragmentColor = vertexColor * lightIntensity;
+            fragmentColor.a = 1.0;
         }
     </script>
 

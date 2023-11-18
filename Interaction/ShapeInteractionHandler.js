@@ -3,7 +3,7 @@ class ShapeInteractionHandler {
     this.shapes = scene.shapes;
     this.activeShapes = [];
     this.useGlobalOrigin = false;
-    this.coordinateSystem =  new CoordinateSystem(scene.gl);
+    this.coordinateSystem = new CoordinateSystem(scene.gl);
     this.coordinateSystem.hide();
     this.canUseArrowKeys = false;
     scene.addSupportShape(this.coordinateSystem);

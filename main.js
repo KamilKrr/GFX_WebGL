@@ -1,13 +1,16 @@
-const { mat4 } = glMatrix;
+const { mat4, vec4, mat3 } = glMatrix;
 const toRad = glMatrix.glMatrix.toRadian;
 
 const locations = {
     attributes: {
         vertexLocation: null,
-        colorLocation: null
+        colorLocation: null,
+        normalLocation: null,
     }, uniforms: {
         modelViewMatrix: null,
         projectionMatrix: null,
+        lightViewPosition: null,
+        normalMatrix: null,
     }
 }
 
@@ -31,8 +34,11 @@ window.onload = async () => {
     /* --------- save attribute & uniform locations --------- */
     locations.attributes.vertexLocation = gl.getAttribLocation(program, "vertexPosition");
     locations.attributes.colorLocation = gl.getAttribLocation(program, "vertexColor");
+    locations.attributes.normalLocation = gl.getAttribLocation(program, "vertexNormal");
     locations.uniforms.modelViewMatrix = gl.getUniformLocation(program, "modelViewMatrix");
     locations.uniforms.projectionMatrix = gl.getUniformLocation(program, "projectionMatrix");
+    locations.uniforms.lightViewPosition = gl.getUniformLocation(program, "lightViewPosition");
+    locations.uniforms.normalMatrix = gl.getUniformLocation(program, "normalMatrix");
 
     camera = new Camera(canvas);
     scene = new Scene();
@@ -40,7 +46,6 @@ window.onload = async () => {
     scene.setGlContext(gl);
 
     gl.uniformMatrix4fv(locations.uniforms.projectionMatrix, gl.FALSE, camera.projectionMatrix);
-    
 
     for(let i = 0; i < 5; i++) {
         let cube = new Cube(gl);
@@ -48,16 +53,19 @@ window.onload = async () => {
         scene.addShape(cube);
     }
 
+    /*
     let pyramid = new Pyramid(gl);
     pyramid.rotate(toRad(90), [1, 0, 0]);
     pyramid.rotate(toRad(45), [0, 1, 0]);
     scene.addShape(pyramid);
+
 
     let cameraInteractionHandler = new CameraInteractionHandler(scene);
     cameraInteractionHandler.registerInputListeners();
 
     let shapeInteractionHandler = new ShapeInteractionHandler(scene);
     shapeInteractionHandler.registerInputListeners();
+    */
 
     window.addEventListener("keydown", (event) => {
         if(event.key == ' '){
@@ -70,7 +78,7 @@ window.onload = async () => {
     });
 
     /* --------- Load some data from external files - only works with an http server --------- */
-    await loadObjFiles();
+    //await loadObjFiles();
 
     /* --------- start render loop --------- */
     requestAnimationFrame(render);

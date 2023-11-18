@@ -64,12 +64,29 @@ class Cube extends Shape {
 
     const colors = [];
 
+    const normalData = [
+      [0, 0, 1],
+      [-1, 0, 0],
+      [0, 0, -1],
+      [0, -1, 0],
+      [1, 0, 0],
+      [0, 1, 0],
+    ];
+
+    const normals = [];
+
     /* --------- add one color per face, so 6 times for each color --------- */
     colorData.forEach(color => {
       for (let i = 0; i < 6; ++i) {
         colors.push(color);
       }
     });
-    this.initData(vertices, colors);
+    normalData.forEach(normal => {
+          for (let i = 0; i < 6; ++i) {
+                normals.push(normal);
+          }
+    });
+
+    this.initData(vertices, colors, normals);
   }
 }
