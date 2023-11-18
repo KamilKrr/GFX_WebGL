@@ -40,9 +40,9 @@ class Shape extends SceneObject {
     draw(camera) {
         if(this.isHidden) return;
         /* --------- set up attribute arrays --------- */
-        Shape.setupAttribute(this.gl, this.buffers.vertexBuffer, locations.attributes.vertexLocation);
-        Shape.setupAttribute(this.gl, this.buffers.colorBuffer, locations.attributes.colorLocation);
-        Shape.setupAttribute(this.gl, this.buffers.normalBuffer, locations.attributes.normalLocation, true);
+        Shape.setupAttribute(this.gl, this.buffers.vertexBuffer, currentShaderProgram.attributes.vertexLocation);
+        Shape.setupAttribute(this.gl, this.buffers.colorBuffer, currentShaderProgram.attributes.colorLocation);
+        Shape.setupAttribute(this.gl, this.buffers.normalBuffer, currentShaderProgram.attributes.normalLocation, true);
 
         /* --------- combine view and model matrix into modelView matrix --------- */
         const modelViewMatrix = mat4.create();
@@ -51,10 +51,10 @@ class Shape extends SceneObject {
         mat4.mul(modelViewMatrix, camera.modelMatrix, modelViewMatrix);
 
         mat3.normalFromMat4(this.normalMatrix, modelViewMatrix);
-        this.gl.uniformMatrix3fv(locations.uniforms.normalMatrix, this.gl.FALSE, this.normalMatrix);
+        this.gl.uniformMatrix3fv(currentShaderProgram.uniforms.normalMatrix, this.gl.FALSE, this.normalMatrix);
 
         /* --------- send modelView matrix to GPU --------- */
-        this.gl.uniformMatrix4fv(locations.uniforms.modelViewMatrix, this.gl.FALSE, modelViewMatrix);
+        this.gl.uniformMatrix4fv(currentShaderProgram.uniforms.modelViewMatrix, this.gl.FALSE, modelViewMatrix);
 
         /* --------- draw the shape --------- */
         this.gl.drawArrays(this.gl.TRIANGLES, 0, this.vertices.length / 4);

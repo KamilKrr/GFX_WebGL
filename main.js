@@ -1,18 +1,31 @@
 const { mat4, vec4, mat3 } = glMatrix;
 const toRad = glMatrix.glMatrix.toRadian;
 
-const locations = {
+const shaders = {
+    withLight: "v-shader",
+    fragment: "f-shader",
+}
+
+const shaderInfo = {
     attributes: {
-        vertexLocation: null,
-        colorLocation: null,
-        normalLocation: null,
-    }, uniforms: {
-        modelViewMatrix: null,
-        projectionMatrix: null,
-        lightViewPosition: null,
-        normalMatrix: null,
+        vertexLocation: "vertexPosition",
+        colorLocation:  "vertexColor",
+        normalLocation:  "vertexNormal",
+    },
+    uniforms: {
+        modelViewMatrix: "modelViewMatrix",
+        projectionMatrix: "projectionMatrix",
+        viewMatrix: "viewMatrix",
+        normalMatrix: "normalMatrix",
+        lightPosition: "lightViewPosition",
     }
 }
+
+const shaderPrograms = {
+    withLightProgram: null
+}
+
+let currentShaderProgram = null;
 
 let camera = null;
 let scene = null;
@@ -28,24 +41,13 @@ window.onload = async () => {
     gl.viewport(0, 0, canvas.clientWidth, canvas.clientHeight);
     gl.clearColor(0.729, 0.764, 0.674, 1);
 
-    const program = createShaderProgram(gl, "v-shader", "f-shader");
-    gl.useProgram(program);
-
-    /* --------- save attribute & uniform locations --------- */
-    locations.attributes.vertexLocation = gl.getAttribLocation(program, "vertexPosition");
-    locations.attributes.colorLocation = gl.getAttribLocation(program, "vertexColor");
-    locations.attributes.normalLocation = gl.getAttribLocation(program, "vertexNormal");
-    locations.uniforms.modelViewMatrix = gl.getUniformLocation(program, "modelViewMatrix");
-    locations.uniforms.projectionMatrix = gl.getUniformLocation(program, "projectionMatrix");
-    locations.uniforms.lightViewPosition = gl.getUniformLocation(program, "lightViewPosition");
-    locations.uniforms.normalMatrix = gl.getUniformLocation(program, "normalMatrix");
-
     camera = new Camera(canvas);
     scene = new Scene();
     scene.setCamera(camera);
     scene.setGlContext(gl);
 
-    gl.uniformMatrix4fv(locations.uniforms.projectionMatrix, gl.FALSE, camera.projectionMatrix);
+    shaderPrograms.withLightProgram = new ShaderProgram(gl, shaders.withLight, shaders.fragment, shaderInfo, camera);
+    shaderPrograms.withLightProgram.enable();
 
     for(let i = 0; i < 5; i++) {
         let cube = new Cube(gl);

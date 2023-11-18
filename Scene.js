@@ -33,7 +33,7 @@ class Scene {
 
     const lightPosition = vec4.fromValues(0, 0, 3, 1);
     vec4.transformMat4(lightPosition, lightPosition, this.camera.modelMatrix);
-    this.gl.uniform4fv(locations.uniforms.lightViewPosition, lightPosition);
+    this.gl.uniform4fv(currentShaderProgram.uniforms.lightViewPosition, lightPosition);
 
     this.shapes.forEach(shape => {
       shape.draw(this.camera);
