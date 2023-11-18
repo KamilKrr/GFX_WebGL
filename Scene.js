@@ -31,9 +31,9 @@ class Scene {
 
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
-    const lightPosition = vec4.fromValues(0, 0, 3, 1);
+    const lightPosition = vec4.fromValues(0, 10, 0, 0);
     vec4.transformMat4(lightPosition, lightPosition, this.camera.modelMatrix);
-    this.gl.uniform4fv(currentShaderProgram.uniforms.lightViewPosition, lightPosition);
+    this.gl.uniform4fv(currentShaderProgram.uniforms.lightPosition, lightPosition);
 
     this.shapes.forEach(shape => {
       shape.draw(this.camera);

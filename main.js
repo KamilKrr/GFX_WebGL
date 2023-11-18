@@ -80,7 +80,7 @@ window.onload = async () => {
     });
 
     /* --------- Load some data from external files - only works with an http server --------- */
-    //await loadObjFiles();
+    await loadObjFiles();
 
     /* --------- start render loop --------- */
     requestAnimationFrame(render);
@@ -99,11 +99,13 @@ async function loadObjFiles() {
     teapot.translate([0.5, 0, 0]);
     scene.addShape(teapot);
 
+    /*
     const textFile = await fetch('3D Objects/text.obj').then(result => result.text());
     let text = WavefrontObjImporter.importShape(textFile, [0.1, 0.1, 0.1], scene.gl);
     text.translate([0, .6, 0]);
     text.scale([.3, .3, .3]);
     scene.addShape(text);
+    */
 }
 
 
