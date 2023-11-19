@@ -35,12 +35,12 @@ class ShapeInteractionHandler {
         "C"  : () => this.#scale([1, 1, 1.1]),
 
         // Rotation
-        "i"  : () => this.#rotate(-5, [1, 0, 0]),
-        "k"  : () => this.#rotate(5, [1, 0, 0]),
-        "o"  : () => this.#rotate(-5, [0, 1, 0]),
-        "u"  : () => this.#rotate(5, [0, 1, 0]),
-        "l"  : () => this.#rotate(-5, [0, 0, 1]),
-        "j"  : () => this.#rotate(5, [0, 0, 1]),
+        "i"  : () => this.canUseArrowKeys && this.#rotate(-5, [1, 0, 0]),
+        "k"  : () => this.canUseArrowKeys && this.#rotate(5, [1, 0, 0]),
+        "o"  : () => this.canUseArrowKeys && this.#rotate(-5, [0, 1, 0]),
+        "u"  : () => this.canUseArrowKeys && this.#rotate(5, [0, 1, 0]),
+        "l"  : () => this.canUseArrowKeys && this.#rotate(-5, [0, 0, 1]),
+        "j"  : () => this.canUseArrowKeys && this.#rotate(5, [0, 0, 1]),
 
         //Translation
         "ArrowLeft"  : () => this.canUseArrowKeys && this.#translate([-0.05, 0, 0]),

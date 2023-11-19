@@ -24,7 +24,7 @@ class Shape extends SceneObject {
         this.Kd = 1.0;
         this.Ks = 1.0;
         this.shininessVal = 12;
-        this.ambientColor = vec3.fromValues(0.8, 0.8, 0.8);
+        this.ambientColor = vec3.fromValues(0.4, 0.4, 0.4);
         this.specularColor = vec3.fromValues(1.0, 1.0, 1.0);
     }
 

@@ -1,6 +1,7 @@
 class Scene {
   constructor() {
     this.camera = null;
+    this.light = null;
     this.shapes = [];
     this.supportShapes = []; // Shapes used for visual support, cannot be selected
     this.then = 0;
@@ -9,6 +10,10 @@ class Scene {
   
   setCamera(camera) {
     this.camera = camera;
+  }
+
+  setLight(light) {
+    this.light = light;
   }
   
   setGlContext(gl) {
@@ -31,9 +36,7 @@ class Scene {
 
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
-    const lightPosition = vec4.fromValues(0, 10, 10, 1);
-    vec4.transformMat4(lightPosition, lightPosition, this.camera.modelMatrix);
-    this.gl.uniform4fv(currentShaderProgram.uniforms.lightPosition, lightPosition);
+    this.gl.uniform4fv(currentShaderProgram.uniforms.lightPosition, this.light.getTranslation(this.camera));
 
     this.shapes.forEach(shape => {
       shape.draw(this.camera);

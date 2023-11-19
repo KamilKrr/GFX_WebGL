@@ -41,6 +41,7 @@ const shaderPrograms = {
 let currentShaderProgram = null;
 
 let camera = null;
+let light = null;
 let scene = null;
 
 window.onload = async () => {
@@ -55,8 +56,11 @@ window.onload = async () => {
     gl.clearColor(0.729, 0.764, 0.674, 1);
 
     camera = new Camera(canvas);
+    light = new Light(light);
+    light.translate([0.0, 10.0, 0.0], true);
     scene = new Scene();
     scene.setCamera(camera);
+    scene.setLight(light);
     scene.setGlContext(gl);
 
     shaderPrograms.gouraudSpecular = new ShaderProgram(gl, shaders.vertexGouraudSpecular, shaders.fragmentGouraud, shaderInfo, camera);
@@ -89,14 +93,23 @@ window.onload = async () => {
     let shaderInteractionHandler = new ShaderInteractionHandler(scene);
     shaderInteractionHandler.registerInputListeners();
 
+    let lightInteractionHandler = new LightInteractionHandler(scene);
+    lightInteractionHandler.registerInputListeners();
+
 
     window.addEventListener("keydown", (event) => {
         if(event.key == ' '){
             cameraInteractionHandler.canUseArrowKeys = true;
             shapeInteractionHandler.canUseArrowKeys = false;
+            lightInteractionHandler.canUseArrowKeys = false;
         } else if(event.key >= 1 && event.key <= 9) {
             cameraInteractionHandler.canUseArrowKeys = false;
             shapeInteractionHandler.canUseArrowKeys = true;
+            lightInteractionHandler.canUseArrowKeys = false;
+        } else if(event.key == 'L') {
+            cameraInteractionHandler.canUseArrowKeys = false;
+            shapeInteractionHandler.canUseArrowKeys = false;
+            lightInteractionHandler.canUseArrowKeys = true;
         }
     });
 
