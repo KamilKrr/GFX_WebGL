@@ -1,9 +1,13 @@
-const { mat4, vec4, mat3 } = glMatrix;
+const { mat4, vec4, mat3, vec3 } = glMatrix;
 const toRad = glMatrix.glMatrix.toRadian;
 
 const shaders = {
-    withLight: "v-shader",
-    fragment: "f-shader",
+    vertexGouraudDiffuse: "v-gouraud-diffuse",
+    vertexGouraudSpecular: "v-gouraud-specular",
+    vertexPhong: "v-phong",
+    fragmentGouraud: "f-gouraud",
+    fragmentPhongSpecular: "f-phong-specular",
+    fragmentPhongDiffuse: "f-phong-diffuse",
 }
 
 const shaderInfo = {
@@ -18,11 +22,20 @@ const shaderInfo = {
         viewMatrix: "viewMatrix",
         normalMatrix: "normalMatrix",
         lightPosition: "lightViewPosition",
+        Ka: "Ka",
+        Kd: "Kd",
+        Ks: "Ks",
+        shininessVal: "shininessVal",
+        ambientColor: "ambientColor",
+        specularColor: "specularColor"
     }
 }
 
 const shaderPrograms = {
-    withLightProgram: null
+    gouraudDiffuse: null,
+    gouraudSpecular: null,
+    phongDiffuse: null,
+    phongSpecular: null,
 }
 
 let currentShaderProgram = null;
@@ -46,15 +59,18 @@ window.onload = async () => {
     scene.setCamera(camera);
     scene.setGlContext(gl);
 
-    shaderPrograms.withLightProgram = new ShaderProgram(gl, shaders.withLight, shaders.fragment, shaderInfo, camera);
-    shaderPrograms.withLightProgram.enable();
+    shaderPrograms.gouraudSpecular = new ShaderProgram(gl, shaders.vertexGouraudSpecular, shaders.fragmentGouraud, shaderInfo, camera);
+    shaderPrograms.gouraudDiffuse = new ShaderProgram(gl, shaders.vertexGouraudDiffuse, shaders.fragmentGouraud, shaderInfo, camera);
+    shaderPrograms.phongSpecular = new ShaderProgram(gl, shaders.vertexPhong, shaders.fragmentPhongSpecular, shaderInfo, camera);
+    shaderPrograms.phongDiffuse = new ShaderProgram(gl, shaders.vertexPhong, shaders.fragmentPhongDiffuse, shaderInfo, camera);
+    shaderPrograms.phongDiffuse.enable();
 
-    /*
+
     for(let i = 0; i < 5; i++) {
         let cube = new Cube(gl);
         cube.translate([-0.8 + 0.4 * i, -0.4, 0]);
         scene.addShape(cube);
-    }*/
+    }
 
     /*
     let pyramid = new Pyramid(gl);
@@ -90,15 +106,15 @@ window.onload = async () => {
 async function loadObjFiles() {
     const bunnyFile = await fetch('3D Objects/bunny.obj').then(result => result.text());
     let bunny = WavefrontObjImporter.importShape(bunnyFile, [0.9, 0.7, 0.5], scene.gl);
-    bunny.scale([4, 4, 4]);
-    bunny.translate([-0.4, 0, 0]);
+    bunny.scale([3, 3, 3]);
+    bunny.translate([-0.4, 0.3, 0]);
     scene.addShape(bunny);
 
 
     const teapotFile = await fetch('3D Objects/teapot.obj').then(result => result.text());
-    let teapot = WavefrontObjImporter.importShape(teapotFile, [0.65, 0.1, 0.2], scene.gl);
-    teapot.scale([.5, .5, .5]);
-    teapot.translate([0.4, -0.2, 0]);
+    let teapot = WavefrontObjImporter.importShape(teapotFile, [1.0, 0.0, 1.0], scene.gl);
+    teapot.scale([.4, .4, .4]);
+    teapot.translate([0.4, 0.2, 0]);
     scene.addShape(teapot);
 
     /*

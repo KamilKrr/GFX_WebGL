@@ -25,8 +25,6 @@ class WavefrontObjImporter {
   }
 
   static #computeVertices(parsedData) {
-    console.log(parsedData);
-
     let vertices = [];
     let normals = [];
 

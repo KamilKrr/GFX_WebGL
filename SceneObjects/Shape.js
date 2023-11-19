@@ -18,6 +18,14 @@ class Shape extends SceneObject {
 
 
         this.normalMatrix = mat3.create();
+
+
+        this.Ka = 0.1;
+        this.Kd = 1.0;
+        this.Ks = 1.0;
+        this.shininessVal = 12;
+        this.ambientColor = vec3.fromValues(0.8, 0.8, 0.8);
+        this.specularColor = vec3.fromValues(1.0, 1.0, 1.0);
     }
 
     initData(vertices, colors, normals) {
@@ -43,6 +51,23 @@ class Shape extends SceneObject {
         Shape.setupAttribute(this.gl, this.buffers.vertexBuffer, currentShaderProgram.attributes.vertexLocation);
         Shape.setupAttribute(this.gl, this.buffers.colorBuffer, currentShaderProgram.attributes.colorLocation);
         Shape.setupAttribute(this.gl, this.buffers.normalBuffer, currentShaderProgram.attributes.normalLocation, true);
+
+
+        let kaLocation = this.gl.getUniformLocation(currentShaderProgram.program, shaderInfo.uniforms.Ka);
+        let kdLocation = this.gl.getUniformLocation(currentShaderProgram.program, shaderInfo.uniforms.Kd);
+        let ksLocation = this.gl.getUniformLocation(currentShaderProgram.program, shaderInfo.uniforms.Ks);
+        let shininessLocation = this.gl.getUniformLocation(currentShaderProgram.program, shaderInfo.uniforms.shininessVal);
+        this.gl.uniform1f(shininessLocation, this.shininessVal);
+        this.gl.uniform1f(kaLocation, this.Ka);
+        this.gl.uniform1f(kdLocation, this.Kd);
+        this.gl.uniform1f(ksLocation, this.Ks);
+
+        let ambientColorLocation = this.gl.getUniformLocation(currentShaderProgram.program, shaderInfo.uniforms.ambientColor);
+        let specularColorLocation = this.gl.getUniformLocation(currentShaderProgram.program, shaderInfo.uniforms.specularColor);
+
+        this.gl.uniform3f(ambientColorLocation, this.ambientColor[0], this.ambientColor[1], this.ambientColor[2]);
+        this.gl.uniform3f(specularColorLocation, this.specularColor[0], this.specularColor[1], this.specularColor[2]);
+
 
         /* --------- combine view and model matrix into modelView matrix --------- */
         const modelViewMatrix = mat4.create();
