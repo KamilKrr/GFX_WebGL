@@ -63,7 +63,7 @@ window.onload = async () => {
     shaderPrograms.gouraudDiffuse = new ShaderProgram(gl, shaders.vertexGouraudDiffuse, shaders.fragmentGouraud, shaderInfo, camera);
     shaderPrograms.phongSpecular = new ShaderProgram(gl, shaders.vertexPhong, shaders.fragmentPhongSpecular, shaderInfo, camera);
     shaderPrograms.phongDiffuse = new ShaderProgram(gl, shaders.vertexPhong, shaders.fragmentPhongDiffuse, shaderInfo, camera);
-    shaderPrograms.phongDiffuse.enable();
+    shaderPrograms.phongSpecular.enable();
 
 
     for(let i = 0; i < 5; i++) {
@@ -78,13 +78,17 @@ window.onload = async () => {
     pyramid.rotate(toRad(45), [0, 1, 0]);
     scene.addShape(pyramid);
 
-
+    */
     let cameraInteractionHandler = new CameraInteractionHandler(scene);
     cameraInteractionHandler.registerInputListeners();
 
+
     let shapeInteractionHandler = new ShapeInteractionHandler(scene);
     shapeInteractionHandler.registerInputListeners();
-    */
+
+    let shaderInteractionHandler = new ShaderInteractionHandler(scene);
+    shaderInteractionHandler.registerInputListeners();
+
 
     window.addEventListener("keydown", (event) => {
         if(event.key == ' '){
