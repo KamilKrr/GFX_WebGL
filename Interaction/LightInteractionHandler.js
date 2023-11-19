@@ -21,19 +21,18 @@ class LightInteractionHandler {
         "j"  : () => this.canUseArrowKeys && this.#rotateLight(5, [0, 0, 1]),
 
         //Translation
-        "ArrowLeft"  : () => this.canUseArrowKeys && this.#translateLight([-0.15, 0, 0]),
-        "ArrowRight"  : () => this.canUseArrowKeys && this.#translateLight([0.15, 0, 0]),
-        "ArrowUp"  : () => this.canUseArrowKeys && this.#translateLight([0, 0.15, 0]),
-        "ArrowDown"  : () => this.canUseArrowKeys && this.#translateLight([0, -0.15, 0]),
-        ","  : () => this.canUseArrowKeys && this.#translateLight([0, 0, 0.15]),
-        "."  : () => this.canUseArrowKeys && this.#translateLight([0, 0, -0.15]),
+        "ArrowLeft"  : () => this.canUseArrowKeys && this.#translateLight([-0.5, 0, 0]),
+        "ArrowRight"  : () => this.canUseArrowKeys && this.#translateLight([0.5, 0, 0]),
+        "ArrowUp"  : () => this.canUseArrowKeys && this.#translateLight([0, 0.5, 0]),
+        "ArrowDown"  : () => this.canUseArrowKeys && this.#translateLight([0, -0.5, 0]),
+        ","  : () => this.canUseArrowKeys && this.#translateLight([0, 0, 0.5]),
+        "."  : () => this.canUseArrowKeys && this.#translateLight([0, 0, -0.5]),
       }[event.key]
       callback?.()
     })
   }
 
   #translateLight(vector) {
-    console.log(this.light);
     this.light.translate(vector, true);
   }
   

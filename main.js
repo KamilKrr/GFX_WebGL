@@ -107,9 +107,9 @@ window.onload = async () => {
             shapeInteractionHandler.canUseArrowKeys = true;
             lightInteractionHandler.canUseArrowKeys = false;
         } else if(event.key == 'L') {
+            lightInteractionHandler.canUseArrowKeys = !lightInteractionHandler.canUseArrowKeys;
+            shapeInteractionHandler.canUseArrowKeys = !lightInteractionHandler.canUseArrowKeys;
             cameraInteractionHandler.canUseArrowKeys = false;
-            shapeInteractionHandler.canUseArrowKeys = false;
-            lightInteractionHandler.canUseArrowKeys = true;
         }
     });
 

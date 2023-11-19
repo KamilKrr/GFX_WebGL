@@ -26,6 +26,29 @@ class CoordinateSystem extends Shape {
       0, 0, .4, 1,
       ];
 
+    const normals = [
+      [0, 1, 0],
+      [0, 1, 0],
+      [0, 1, 0],
+      [0, 1, 0],
+      [0, 1, 0],
+      [0, 1, 0],
+
+      [0, 1, 0],
+      [0, 1, 0],
+      [0, 1, 0],
+      [0, 1, 0],
+      [0, 1, 0],
+      [0, 1, 0],
+
+      [0, 1, 0],
+      [0, 1, 0],
+      [0, 1, 0],
+      [0, 1, 0],
+      [0, 1, 0],
+      [0, 1, 0],
+      ];
+
     const colors = [
       [1, 0, 0, 1],
       [1, 0, 0, 1],
@@ -49,6 +72,6 @@ class CoordinateSystem extends Shape {
       [0, 0, 1, 1],
       ]
     
-    this.initData(vertices, colors);
+    this.initData(vertices, colors, normals);
   }
 }

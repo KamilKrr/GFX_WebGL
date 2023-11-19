@@ -3,10 +3,10 @@ class ShapeInteractionHandler {
     this.shapes = scene.shapes;
     this.activeShapes = [];
     this.useGlobalOrigin = false;
-    this.coordinateSystem = null;//new CoordinateSystem(scene.gl);
-    //this.coordinateSystem.hide();
+    this.coordinateSystem = new CoordinateSystem(scene.gl);
+    this.coordinateSystem.hide();
     this.canUseArrowKeys = false;
-    //scene.addSupportShape(this.coordinateSystem);
+    scene.addSupportShape(this.coordinateSystem);
   }
   
   registerInputListeners() {
@@ -14,15 +14,15 @@ class ShapeInteractionHandler {
       if(event.code === 'Digit0'){
         this.useGlobalOrigin = true;
         this.activeShapes = this.shapes;
-        //this.coordinateSystem.hide();
+        this.coordinateSystem.hide();
       }else if(event.key >= 1 && event.key <= this.shapes.length) {
         this.useGlobalOrigin = false;
         this.activeShapes = [this.shapes[event.key - 1]];
 
-        //this.coordinateSystem.modelMatrix = this.shapes[event.key - 1].modelMatrix;
-        //this.coordinateSystem.scaleMatrixGlobal = this.shapes[event.key - 1].scaleMatrixGlobal;
+        this.coordinateSystem.modelMatrix = this.shapes[event.key - 1].modelMatrix;
+        this.coordinateSystem.scaleMatrixGlobal = this.shapes[event.key - 1].scaleMatrixGlobal;
 
-        //this.coordinateSystem.show();
+        this.coordinateSystem.show();
       }
 
       const callback = {
