@@ -102,7 +102,7 @@ window.onload = async () => {
             cameraInteractionHandler.canUseArrowKeys = true;
             shapeInteractionHandler.canUseArrowKeys = false;
             lightInteractionHandler.canUseArrowKeys = false;
-        } else if(event.key >= 1 && event.key <= 9) {
+        } else if(event.key >= 0 && event.key <= 9) {
             cameraInteractionHandler.canUseArrowKeys = false;
             shapeInteractionHandler.canUseArrowKeys = true;
             lightInteractionHandler.canUseArrowKeys = false;
@@ -124,15 +124,25 @@ async function loadObjFiles() {
     const bunnyFile = await fetch('3D Objects/bunny.obj').then(result => result.text());
     let bunny = WavefrontObjImporter.importShape(bunnyFile, [0.9, 0.7, 0.5], scene.gl);
     bunny.scale([3, 3, 3]);
-    bunny.translate([-0.4, 0.3, 0]);
+    bunny.translate([-0.4, 0.4, 0]);
     scene.addShape(bunny);
+
+    let bunny2 = WavefrontObjImporter.importShape(bunnyFile, [0.5, 0.7, 0.9], scene.gl);
+    bunny2.scale([2, 2, 2]);
+    bunny2.translate([0.2, 0.0, 0]);
+    scene.addShape(bunny2);
 
 
     const teapotFile = await fetch('3D Objects/teapot.obj').then(result => result.text());
     let teapot = WavefrontObjImporter.importShape(teapotFile, [1.0, 0.0, 1.0], scene.gl);
     teapot.scale([.4, .4, .4]);
-    teapot.translate([0.4, 0.2, 0]);
+    teapot.translate([0.4, 0.3, 0]);
     scene.addShape(teapot);
+
+    let teapot2 = WavefrontObjImporter.importShape(teapotFile, [0.0, 1.0, 1.0], scene.gl);
+    teapot2.scale([.2, .2, .2]);
+    teapot2.translate([-0.2, -0.09, 0]);
+    scene.addShape(teapot2);
 
     /*
     const sphereFile = await fetch('3D Objects/sphere.obj').then(result => result.text());
